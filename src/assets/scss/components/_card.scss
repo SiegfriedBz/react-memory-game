@@ -1,0 +1,47 @@
+.card-wrapper {
+  cursor: pointer;
+  position: relative;
+
+  img {
+    width: 100%;
+    padding: 16px;
+    border-radius: 24px;
+  }
+
+  .frontBase {
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  .front {
+    @extend .frontBase;
+    transform: rotateY(90deg);
+  }
+
+  .cardIsFound {
+    @extend .frontBase;
+    transform: rotateY(0deg);
+    z-index: 999;
+  }
+
+  &:hover {
+    .front:not(.cardIsFound) {
+      animation: flip 0.5s 0.5s ease-in-out forwards reverse;
+    }
+
+    .back:not(.cardIsFound) {
+      animation: flip 0.5s ease-in-out forwards;
+    }
+  }
+
+  @keyframes flip {
+    0% {
+      transform: rotateY(0deg)
+    }
+    100% {
+      transform: rotateY(90deg)
+    }
+  }
+}

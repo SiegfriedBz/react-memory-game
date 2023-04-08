@@ -2,5 +2,5 @@
 @import 'custom/index'; // bs + $sass variables + bs colors extension
 @import 'base/index'; // global variables (*, body...)
 //@import 'layout/index'; // navbar footer...
-//@import 'components/index'; // btns, component scoping
+@import 'components/index'; // btns, component scoping
 //@import 'pages/index'; // page scoping
