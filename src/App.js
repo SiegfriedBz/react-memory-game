@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Cards from './components/Cards'
 import helmet from './assets/img/cards/helmet.png'
 import potion from './assets/img/cards/potion.png'
@@ -26,31 +26,30 @@ function App() {
     const [cards, setCards] = useState([])
     const [counter, setCounter] = useState(0)
     const [choiceOne, setChoiceOne] = useState(undefined)
-    const [gameWon, setGameWon] = useState(false)
-
-    console.log('gameWon', gameWon)
+    const [gameIsWon, setGameIsWon] = useState(false)
 
     const [width, height] = useWindowSize()
 
-    const shuffle = () => {
-        const shuffledCards = [...cardImages, ...cardImages]
-            .sort(() => Math.random() - 0.5)
-            .map((card, index) => ({ ...card, id: index, found: false }))
-
-        setCards(shuffledCards)
-        setCounter(0)
-    }
-
-    const gameIsWon = () => {
+    useEffect(() =>{
         const allCardsFound = cards.reduce((acc, curr) => {
             return { found: acc.found && curr.found }
         }, { found: true }).found
 
-        console.log('allCardsFound', allCardsFound)
-        setGameWon(allCardsFound)
+        setGameIsWon(allCardsFound)
+    }, [counter])
+
+    const startGame = () => {
+        setGameIsWon(false)
+        const startGamedCards = [...cardImages, ...cardImages]
+            .sort(() => Math.random() - 0.5)
+            .map((card, index) => ({ ...card, id: index, found: false }))
+
+        setCards(startGamedCards)
+        setCounter(0)
     }
 
     const playCard = (_id) => {
+        setCounter(prev => prev + 1)
         const playedCard = cards.find(card => card.id === _id)
         if (!choiceOne) {
             setChoiceOne(playedCard)
@@ -63,14 +62,13 @@ function App() {
                     )
                 }))
             }
-            gameIsWon()
             setChoiceOne(undefined)
         }
     }
 
      return (
         <div className="app">
-            {gameWon &&
+            {gameIsWon &&
                 <Confetti
                     width={width}
                     height={height}
@@ -83,7 +81,7 @@ function App() {
             </div>
             <button
                 className="btn btn-outline-primary my-3"
-                onClick={() => shuffle()}
+                onClick={() => startGame()}
             >Play Game</button>
             <Cards cards={cards} playCard={playCard} />
         </div>
